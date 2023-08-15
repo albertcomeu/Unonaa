@@ -1,22 +1,12 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
 const SuccessfulReg = ({ route }) => {
   const { FinalUserData } = route.params;
-  console.log(FinalUserData['email']);
-  console.log(FinalUserData['password']);
-  console.log(FinalUserData['username']);
-  console.log(FinalUserData['gender']);
-  console.log(FinalUserData['orientation']);
-  console.log(FinalUserData['height']);
-  console.log(FinalUserData['age']);
-  console.log(FinalUserData['relationType']);
-  console.log(FinalUserData['p_height']);
-  console.log(FinalUserData['p_age']);
-
   const navigation = useNavigation();
+  const [currentUser, setCurrentUser] = useState(null);
 
   const sendUserData = async () => {
     try {
@@ -31,9 +21,27 @@ const SuccessfulReg = ({ route }) => {
           age: FinalUserData['age'],
           relationType: FinalUserData['relationType'],
           p_height: FinalUserData['p_height'],
-          p_age: FinalUserData['p_age'],})
+          p_age: FinalUserData['p_age'],
+        }),
       });
-      console.log('Response:', response.data); // Логируем ответ от сервера
+      console.log('Response:', response.data);
+
+      // Выполняем GET запрос для получения всех пользователей
+      try {
+        const getUserResponse = await axios.get('http://192.168.0.178:8000/api/users/');
+        const users = getUserResponse.data;
+
+        // Ищем пользователя в массиве по email
+        const foundUser = users.find(user => user.email === FinalUserData['email']);
+
+        if (foundUser) {
+          setCurrentUser(foundUser);
+        } else {
+          console.log('Пользователь не найден');
+        }
+      } catch (getUserError) {
+        console.error('Error getting users:', getUserError);
+      }
     } catch (error) {
       console.error('Error sending user data:', error);
     }
@@ -43,12 +51,31 @@ const SuccessfulReg = ({ route }) => {
     sendUserData();
   }, []);
 
+  const goToHomeScreen = () => {
+    if (currentUser) {
+      navigation.navigate('HomeScreen', { currentUser });
+    } else {
+      console.log('Пользователь не найден');
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Congratulations!</Text>
-      <Text style={styles.text}>You have successfully completed the registration.</Text>
-      <Text style={styles.text}>Here is your data:</Text>
-
+      <Text style={styles.title}>Поздравляем!</Text>
+      <Text style={styles.text}>Вы успешно зарегистрировались.</Text>
+      <Text style={styles.text}>Ваши данные:</Text>
+      <View style={styles.userDataContainer}>
+        <Text style={styles.userDataText}>Username: {FinalUserData['username']}</Text>
+        <Text style={styles.userDataText}>Email: {FinalUserData['email']}</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={goToHomeScreen}
+        >
+          <Text style={styles.buttonText}>Далее</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -78,6 +105,23 @@ const styles = StyleSheet.create({
   userDataText: {
     fontSize: 18,
     color: 'peachpuff',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  },
+  button: {
+    backgroundColor: 'peachpuff', // Изменен цвет кнопки на персиковый
+    borderColor: 'peachpuff',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  buttonText: {
+    color: 'black', // Изменен цвет текста на черный
+    textAlign: 'center',
   },
 });
 

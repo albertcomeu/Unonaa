@@ -10,7 +10,8 @@ import RegisterTallWeight from './RegisterTallWeight'
 import RegisterPartnerQual from './RegisterPartnerQual';
 import SuccessfulReg from './SuccessfulReg';
 import LoginScreen from './Login';
-import LoginConform from './LoginConform';
+import HomeScreen from './MainMenu';
+import ProfileScreen from './Profile';
 
 const Stack = createStackNavigator();
 
@@ -25,8 +26,8 @@ const App = () => {
         <Stack.Screen name="Register2" component={RegisterPartnerQual} />
         <Stack.Screen name="RegisterFinal" component={SuccessfulReg} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="LoginConform" component={LoginConform} />
-
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

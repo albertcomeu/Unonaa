@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const RegisterMailScreen = () => {
+const RegisterMailScreen = (navigate) => {
   const [email, setEmail] = useState('mail@example.ru');
   const [password, setPassword] = useState('Введите пароль');
   const [confirmPassword, setConfirmPassword] = useState('Подтвердите пароль');

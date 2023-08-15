@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('mail@example.ru');
@@ -15,8 +16,22 @@ const LoginScreen = () => {
     setPassword(text);
   };
 
-  const navigateToNextScreen = () => {
-    navigation.navigate('LoginConform', { email, password });
+  const navigateToNextScreen = async () => {
+    try {
+      const response = await axios.get('http://192.168.0.178:8000/api/users/'); // Замените на ваш URL для получения пользователей
+      const users = response.data; // Полученные данные пользователей с сервера
+
+      const foundUser = users.find((user) => user.email === email);
+      if (foundUser) {
+        let currentUser = foundUser
+        navigation.navigate("HomeScreen", {currentUser});
+      } else {
+        console.log('Пользователь не найден'); // Выводим сообщение в консоль
+      }
+    } catch (error) {
+      console.error('Error searching user:', error);
+      console.log('Ошибка при поиске пользователя'); // Выводим сообщение в консоль
+    }
   };
 
   return (
