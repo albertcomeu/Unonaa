@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 
 const RegisterPartnerQual = ({ route }) => {
   const [relationType, setRelationType] = useState('Долгосрочные отношения');
-  const [height, setHeight] = useState('Низкий рост < 160');
-  const [age, setAge] = useState('Юный (<25)');
+  const [p_height, setHeight] = useState('Низкий рост < 160');
+  const [p_age, setAge] = useState('Юный (<25)');
   const navigation = useNavigation();
 
   const handleRelationTypeChange = (value) => {
@@ -45,8 +45,8 @@ const RegisterPartnerQual = ({ route }) => {
 
     const partnerQualData = {
       relationType,
-      height,
-      age,
+      p_height,
+      p_age,
     };
 
     let FinalUserData = Object.assign({}, r1Data, partnerQualData);

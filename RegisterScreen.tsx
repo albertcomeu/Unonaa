@@ -15,9 +15,11 @@ const orietantion_options = [
   { label: "Другая", value: "Другая" },
 ];
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ( {route} ) => {
   const [selectedGender, setSelectedGender] = useState<string>(gender_options[0].value);
   const [selectedOrientation, setSelectedOrientation] = useState<string>(orietantion_options[0].value);
+
+  const { userMailinf } = route.params;
 
   const handleGenderChange = (value: string) => {
     setSelectedGender(value);
@@ -30,12 +32,13 @@ const RegistrationScreen = () => {
   const navigation = useNavigation();
 
   const navigateToNextScreen = () => {
-    // Здесь можно сохранить значения в массив или объект, или передать их на следующий экран
-    const userData = {
+    console.log(userMailinf)
+    const Data = {
       gender: selectedGender,
       orientation: selectedOrientation,
     };
-    console.log("User Data:", userData);
+
+    let userData = Object.assign({}, Data, userMailinf);
 
     navigation.navigate("Register1", {userData});
   };

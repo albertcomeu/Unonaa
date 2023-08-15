@@ -6,6 +6,7 @@ const RegisterMailScreen = () => {
   const [email, setEmail] = useState('mail@example.ru');
   const [password, setPassword] = useState('Введите пароль');
   const [confirmPassword, setConfirmPassword] = useState('Подтвердите пароль');
+  const [username, setUsername] = useState('Введите username');
   const navigation = useNavigation();
 
   const handleEmailChange = (text) => {
@@ -20,8 +21,20 @@ const RegisterMailScreen = () => {
     setConfirmPassword(text);
   };
 
+  const handleUsernameChange = (text) => {
+    setUsername(text);
+  };
+
   const navigateToNextScreen = () => {
-    navigation.navigate('RegisterMailConform', { email, password });
+    console.log(email)
+
+    const userMailinf = {
+      email: email,
+      password: password,
+      username: username
+    };
+
+    navigation.navigate('Register', { userMailinf });
   };
 
   return (
@@ -37,12 +50,22 @@ const RegisterMailScreen = () => {
         style={styles.input}
         value={password}
         onChangeText={handlePasswordChange}
+        placeholder="Пароль"
         placeholderTextColor="peachpuff"
+
       />
       <TextInput
         style={styles.input}
         value={confirmPassword}
         onChangeText={handleConfirmPasswordChange}
+        placeholder="Подтвердите пароль"
+        placeholderTextColor="peachpuff"
+      />
+      <TextInput
+        style={styles.input}
+        value={username}
+        onChangeText={handleUsernameChange}
+        placeholder="Username"
         placeholderTextColor="peachpuff"
       />
       <TouchableOpacity style={styles.button} onPress={navigateToNextScreen}>
